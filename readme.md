@@ -1,67 +1,50 @@
 # Personal Finance Manager 💰
 
-A full-stack personal project to **learn Docker, Python (FastAPI), React, MongoDB (NoSQL), and Deployment** by building a real-world **Personal Finance Management** system.
+A full-stack personal finance tracker built to learn **Docker, FastAPI, React, and MongoDB**.
 
-This project focuses on **learning-by-doing**.  
-Only the starter structure is defined — implementation is intentionally left to be built step by step.
+## 🚀 Quick Start
 
----
+1.  **Clone the repository** (if you haven't already):
+    ```bash
+    git clone <your-repo-url>
+    cd personal-finance-manager
+    ```
 
-## 🎯 Project Goal
+2.  **Run with Docker Compose**:
+    ```bash
+    docker-compose up --build
+    ```
 
-Build a system to:
-- Track **monthly cash inflows & outflows**
-- Categorize expenses (food, rent, travel, etc.)
-- View monthly summaries
-- Export finance data (CSV / Excel / PDF)
-- Deploy the full stack using Docker
+3.  **Access the Application**:
+    *   **Frontend**: [http://localhost:5173](http://localhost:5173)
+    *   **Backend API**: [http://localhost:8000](http://localhost:8000)
+    *   **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
----
+## 🏗️ Tech Stack
 
-## 🧠 Tech Stack (Learning Focus)
+| Service | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend** | React + Vite | Fast, modern UI library. |
+| **Backend** | FastAPI (Python) | High-performance async API. |
+| **Database** | MongoDB | NoSQL database for flexible data schemas. |
+| **Infrastructure** | Docker | Containerization for consistent environments. |
 
-| Layer        | Technology |
-|--------------|------------|
-| Frontend     | React |
-| Backend      | Python + FastAPI |
-| Database     | MongoDB (NoSQL) |
-| Containers   | Docker & Docker Compose |
-| Deployment   | Cloud VM (AWS / Azure / GCP) |
+## 📅 Roadmap
 
----
+See [Project Roadmap](file:///home/srikanth/.gemini/antigravity/brain/12718863-7015-41ff-b117-255072c09248/project_roadmap.md) for detailed implementation phases.
 
-## 📁 Project Structure
+## 🛠️ Project Structure
 
 ```text
 personal-finance-manager/
-│
-├── backend/
-│   ├── app/
-│   │   ├── main.py          # FastAPI entry point
-│   │   ├── config/          # Env & settings
-│   │   ├── models/          # MongoDB schemas
-│   │   ├── routes/          # API routes
-│   │   ├── services/        # Business logic
-│   │   └── utils/           # Helpers
-│   │
-│   ├── requirements.txt
+├── backend/            # FastAPI Application
+│   ├── app/            # Source code
 │   ├── Dockerfile
-│   └── .env.example
-│
-├── frontend/
+│   └── requirements.txt
+├── frontend/           # React Application
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/        # API calls
-│   │   └── App.js
-│   │
-│   ├── package.json
 │   ├── Dockerfile
-│   └── .env.example
-│
-├── database/
-│   └── init.js              # MongoDB init scripts (optional)
-│
-├── docker-compose.yml
-├── .gitignore
-└── README.md
+│   └── package.json
+├── docker-compose.yml  # Orchestration
+└── README.md           # This file
+```
