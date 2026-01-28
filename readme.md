@@ -10,10 +10,39 @@ A full-stack personal finance tracker built to learn **Docker, FastAPI, React, a
     cd personal-finance-manager
     ```
 
-2.  **Run with Docker Compose**:
+### Option 1: Run with Docker Compose (Recommended)
     ```bash
     docker-compose up --build
     ```
+
+### Option 2: Run Locally (Manual Setup)
+
+**Prerequisites:**
+*   Node.js & npm
+*   Python 3.10+
+*   MongoDB (running locally on port 27017)
+
+**1. Backend Setup:**
+```bash
+cd backend
+# Create virtual environment
+python -m venv venv
+# Activate virtual environment
+# Windows:
+.\venv\Scripts\activate
+# Mac/Linux:
+# source venv/bin/activate
+pip install -r requirements.txt
+# Run Server
+uvicorn app.main:app --reload
+```
+
+**2. Frontend Setup:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 3.  **Access the Application**:
     *   **Frontend**: [http://localhost:5173](http://localhost:5173)
