@@ -4,7 +4,7 @@ export default function ExpenseList({ expenses, onDeleteExpense }) {
     if(!window.confirm("Are you sure you want to delete this expense?")) return;
 
     try {
-        const response = await fetch(`http://localhost:8000/api/expenses/${id}`, {
+        const response = await fetch(`http://localhost:8005/api/expenses/${id}`, {
             method: 'DELETE'
         });
         if(response.ok) {
