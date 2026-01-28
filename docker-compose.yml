@@ -11,7 +11,7 @@ services:
     ports:
       - "8005:8005"
     environment:
-      - MONGODB_URL=mongodb://mongo:27017/pfm_db
+      - MONGODB_URL=mongodb+srv://srikanthsri051199:2KcU3HEsjTGDQeD5@personal-finance.r95w4we.mongodb.net/pfm_db
     depends_on:
       - mongo
     networks:
