@@ -20,7 +20,7 @@ export default function AddExpenseForm({ onAddExpense }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/api/expenses/', {
+      const response = await fetch('http://localhost:8005/api/expenses/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

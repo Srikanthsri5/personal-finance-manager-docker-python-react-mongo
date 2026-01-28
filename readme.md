@@ -46,8 +46,8 @@ npm run dev
 
 3.  **Access the Application**:
     *   **Frontend**: [http://localhost:5173](http://localhost:5173)
-    *   **Backend API**: [http://localhost:8000](http://localhost:8000)
-    *   **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+    *   **Backend API**: [http://localhost:8005](http://localhost:8005)
+    *   **API Documentation**: [http://localhost:8005/docs](http://localhost:8005/docs)
 
 ## 🏗️ Tech Stack
 

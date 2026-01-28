@@ -12,7 +12,7 @@ function App() {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/expenses/');
+      const response = await fetch('http://localhost:8005/api/expenses/');
       if (response.ok) {
         const data = await response.json();
         setExpenses(data);
