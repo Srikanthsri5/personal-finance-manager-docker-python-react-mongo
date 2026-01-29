@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-motor
+motor>=3.4.0
 python-dotenv
 pydantic
 pydantic-settings
