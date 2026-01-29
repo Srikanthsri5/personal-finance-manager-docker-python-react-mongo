@@ -46,6 +46,17 @@ def get_date_filter(view: str):
         return {"date": {"$gte": start.isoformat(), "$lte": end.isoformat()}}
     return {}
 
+def get_month_filter(year: int, month: int):
+    try:
+        start_date = datetime(year, month, 1)
+        if month == 12:
+            end_date = datetime(year + 1, 1, 1) - timedelta(seconds=1)
+        else:
+            end_date = datetime(year, month + 1, 1) - timedelta(seconds=1)
+        return {"date": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()}}
+    except ValueError:
+        return {}
+
 @router.post("/", response_description="Add new expense", response_model=ExpenseModel)
 async def create_expense(expense: ExpenseCreate = Body(...)):
     expense_dict = jsonable_encoder(expense)
@@ -54,14 +65,34 @@ async def create_expense(expense: ExpenseCreate = Body(...)):
     return created_expense
 
 @router.get("/", response_description="List expenses", response_model=List[ExpenseModel])
-async def list_expenses(view: Optional[str] = Query('all', enum=['all', 'daily', 'weekly', 'monthly', 'yearly'])):
-    filter_query = get_date_filter(view)
+async def list_expenses(
+    year: Optional[int] = Query(None), 
+    month: Optional[int] = Query(None),
+    view: Optional[str] = Query(None, enum=['all', 'daily', 'weekly', 'monthly', 'yearly'])
+):
+    filter_query = {}
+    if year and month:
+        filter_query = get_month_filter(year, month)
+    elif view:
+        filter_query = get_date_filter(view)
+        
     expenses = await expense_collection.find(filter_query).to_list(1000)
     return expenses
 
 @router.get("/export/excel", response_description="Export expenses to Excel")
-async def export_excel(view: Optional[str] = Query('all', enum=['all', 'daily', 'weekly', 'monthly', 'yearly'])):
-    filter_query = get_date_filter(view)
+async def export_excel(
+    year: Optional[int] = Query(None), 
+    month: Optional[int] = Query(None),
+    view: Optional[str] = Query('all', enum=['all', 'daily', 'weekly', 'monthly', 'yearly'])
+):
+    filter_query = {}
+    label = view
+    if year and month:
+        filter_query = get_month_filter(year, month)
+        label = f"{datetime(year, month, 1).strftime('%B_%Y')}"
+    elif view:
+        filter_query = get_date_filter(view)
+    
     expenses = await expense_collection.find(filter_query).to_list(1000)
     
     if not expenses:
@@ -82,13 +113,24 @@ async def export_excel(view: Optional[str] = Query('all', enum=['all', 'daily', 
     output.seek(0)
     
     headers = {
-        'Content-Disposition': f'attachment; filename="expenses_{view}.xlsx"'
+        'Content-Disposition': f'attachment; filename="expenses_{label}.xlsx"'
     }
     return StreamingResponse(output, headers=headers, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @router.get("/export/pdf", response_description="Export expenses to PDF")
-async def export_pdf(view: Optional[str] = Query('all', enum=['all', 'daily', 'weekly', 'monthly', 'yearly'])):
-    filter_query = get_date_filter(view)
+async def export_pdf(
+    year: Optional[int] = Query(None), 
+    month: Optional[int] = Query(None),
+    view: Optional[str] = Query('all', enum=['all', 'daily', 'weekly', 'monthly', 'yearly'])
+):
+    filter_query = {}
+    label = view.capitalize()
+    if year and month:
+        filter_query = get_month_filter(year, month)
+        label = f"{datetime(year, month, 1).strftime('%B %Y')}"
+    elif view:
+        filter_query = get_date_filter(view)
+
     expenses = await expense_collection.find(filter_query).to_list(1000)
 
     if not expenses:
@@ -99,14 +141,26 @@ async def export_pdf(view: Optional[str] = Query('all', enum=['all', 'daily', 'w
     elements = []
     styles = getSampleStyleSheet()
 
-    elements.append(Paragraph(f"Expense Report - {view.capitalize()}", styles['Title']))
+    elements.append(Paragraph(f"Expense Report - {label}", styles['Title']))
 
     # Table Data
-    data = [['Date', 'Title', 'Category', 'Amount', 'Notes']]
-    total_amount = 0.0
+    data = [['Date', 'Title', 'Category', 'Income', 'Expense', 'Notes']]
+    total_in = 0.0
+    total_out = 0.0
+
     for exp in expenses:
         amount = exp.get('amount', 0)
-        total_amount += amount
+        is_income = exp.get('type') == 'cash_in'
+        
+        if is_income:
+            total_in += amount
+            income_str = f"+${amount:.2f}"
+            expense_str = ""
+        else:
+            total_out += amount
+            income_str = ""
+            expense_str = f"-${amount:.2f}"
+
         date_str = exp.get('date', '')
         if 'T' in date_str:
             date_str = date_str.split('T')[0]
@@ -115,11 +169,13 @@ async def export_pdf(view: Optional[str] = Query('all', enum=['all', 'daily', 'w
             date_str,
             exp.get('title', ''),
             exp.get('category', ''),
-            f"${amount:.2f}",
+            income_str,
+            expense_str,
             exp.get('notes', '')
         ])
     
-    data.append(['', '', 'Total', f"${total_amount:.2f}", ''])
+    data.append(['', '', 'Total', f"+${total_in:.2f}", f"-${total_out:.2f}", ''])
+    data.append(['', '', 'Net Balance', '', f"${(total_in - total_out):.2f}", ''])
 
     table = Table(data)
     table.setStyle(TableStyle([
@@ -130,6 +186,8 @@ async def export_pdf(view: Optional[str] = Query('all', enum=['all', 'daily', 'w
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('TEXTCOLOR', (3, 1), (3, -1), colors.green), # Income column
+        ('TEXTCOLOR', (4, 1), (4, -1), colors.red),   # Expense column
     ]))
     
     elements.append(table)
@@ -137,7 +195,7 @@ async def export_pdf(view: Optional[str] = Query('all', enum=['all', 'daily', 'w
     buffer.seek(0)
 
     headers = {
-        'Content-Disposition': f'attachment; filename="expenses_{view}.pdf"'
+        'Content-Disposition': f'attachment; filename="expenses_{label.replace(" ", "_")}.pdf"'
     }
     return StreamingResponse(buffer, headers=headers, media_type='application/pdf')
 
