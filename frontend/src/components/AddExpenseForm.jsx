@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { EXPENSE_CATEGORIES } from '../utils/categories';
+import { useState, useEffect } from 'react';
+import { getCategories } from '../services/categoryService';
 
 export default function AddExpenseForm({ onAddExpense }) {
   const [formData, setFormData] = useState({
@@ -9,6 +9,19 @@ export default function AddExpenseForm({ onAddExpense }) {
     date: new Date().toISOString().split('T')[0],
     notes: ''
   });
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCats = async () => {
+        try {
+            const data = await getCategories();
+            setCategories(data);
+        } catch (error) {
+            console.error("Failed to load categories", error);
+        }
+    };
+    fetchCats();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,8 +91,8 @@ export default function AddExpenseForm({ onAddExpense }) {
         <label>Category</label>
         <select name="category" value={formData.category} onChange={handleChange} required>
             <option value="">Select Category</option>
-            {EXPENSE_CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
+            {categories.map(cat => (
+                <option key={cat._id} value={cat.name}>{cat.name}</option>
             ))}
         </select>
       </div>

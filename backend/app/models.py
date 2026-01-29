@@ -39,3 +39,31 @@ class ExpenseModel(ExpenseBase):
             }
         }
     )
+
+class CategoryBase(BaseModel):
+    name: str = Field(..., min_length=1)
+    type: str = Field(..., min_length=1)
+    budget: Optional[float] = None
+
+class CategoryCreate(CategoryBase):
+    pass
+
+class CategoryUpdate(BaseModel):
+    name: Optional[str] = None
+    type: Optional[str] = None
+    budget: Optional[float] = None
+
+class CategoryModel(CategoryBase):
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_schema_extra={
+            "example": {
+                "name": "Groceries",
+                "type": "expense",
+                "budget": 500.00
+            }
+        }
+    )
