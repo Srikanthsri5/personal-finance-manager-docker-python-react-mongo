@@ -40,7 +40,9 @@ export default function ExpenseList({ expenses, onDeleteExpense }) {
           <div className="empty-state">No transactions recorded for this period.</div>
       ) : (
           Object.keys(groupedExpenses).map(date => {
-              const dayTotal = groupedExpenses[date].reduce((sum, item) => sum + item.amount, 0);
+              const dayTotal = groupedExpenses[date].reduce((sum, item) => {
+                  return item.type === 'cash_in' ? sum + item.amount : sum - item.amount;
+              }, 0);
               const dateObj = new Date(date);
               const displayDate = dateObj.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
               
@@ -48,7 +50,9 @@ export default function ExpenseList({ expenses, onDeleteExpense }) {
                   <div key={date} className="day-group">
                       <div className="day-header">
                           <span className="day-date">{displayDate}</span>
-                          <span className="day-total">₹{dayTotal.toFixed(2)}</span>
+                          <span className="day-total" style={{ color: dayTotal >= 0 ? '#4CAF50' : '#F44336' }}>
+                              {dayTotal >= 0 ? '+' : ''}₹{Math.abs(dayTotal).toFixed(2)}
+                          </span>
                       </div>
                       <div className="day-entries">
                           {groupedExpenses[date].map(expense => (
@@ -63,7 +67,9 @@ export default function ExpenseList({ expenses, onDeleteExpense }) {
                                       </div>
                                   </div>
                                   <div className="entry-right">
-                                      <span className="entry-amount expense">- ₹{expense.amount.toFixed(2)}</span>
+                                      <span className={`entry-amount ${expense.type === 'cash_in' ? 'income' : 'expense'}`}>
+                                          {expense.type === 'cash_in' ? '+' : '-'} ₹{expense.amount.toFixed(2)}
+                                      </span>
                                       <button onClick={() => handleDelete(expense._id)} className="icon-btn delete" title="Delete">
                                           &times;
                                       </button>

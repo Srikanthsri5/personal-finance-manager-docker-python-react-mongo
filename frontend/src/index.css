@@ -230,30 +230,95 @@ th {
 
 /* Summary Card */
 .summary-card {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    background: var(--card-bg);
     padding: 1.5rem;
     border-radius: 12px;
     margin-bottom: 1.5rem;
-    color: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
 }
 
 .summary-item {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    flex: 1;
 }
 
 .summary-label {
-    font-size: 0.9rem;
-    opacity: 0.9;
+    font-size: 0.8rem;
+    opacity: 0.7;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
 }
 
 .summary-value {
-    font-size: 2rem;
+    font-size: 1.25rem;
     font-weight: bold;
-    margin-top: 0.25rem;
+}
+
+.summary-value.income { color: #4CAF50; }
+.summary-value.expense { color: #F44336; }
+.summary-value.balance { color: #2196F3; }
+
+
+/* Add Transaction Form - Type Toggle */
+.type-toggle-container {
+    margin-bottom: 1.5rem;
+}
+
+.type-toggle {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.type-btn.cash-in:hover { border-color: #4CAF50; color: #4CAF50; }
+.type-btn.cash-out:hover { border-color: #F44336; color: #F44336; }
+
+.type-btn.cash-in.active {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+.type-btn.cash-out.active {
+    background: #F44336;
+    border-color: #F44336;
+    color: white;
+}
+
+.btn-green {
+    background-color: #4CAF50 !important;
+}
+
+.btn-green:hover {
+    background-color: #43a047 !important;
+}
+
+.btn-red {
+    background-color: #F44336 !important;
+}
+.btn-red:hover {
+    background-color: #d32f2f !important;
 }
 
 /* Dashboard Controls */
@@ -414,12 +479,38 @@ th {
     color: #ff4d4f;
 }
 
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: #888;
-    font-style: italic;
-    background: var(--card-bg);
-    border-radius: 8px;
+
+/* Month Navigator */
+.month-navigator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-btn {
+    background: transparent;
     border: 1px solid var(--border-color);
+    color: var(--text-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.current-month {
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-width: 120px;
+    text-align: center;
 }

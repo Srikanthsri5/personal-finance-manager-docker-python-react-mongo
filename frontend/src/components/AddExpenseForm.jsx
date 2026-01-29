@@ -6,6 +6,7 @@ export default function AddExpenseForm({ onAddExpense }) {
     title: '',
     amount: '',
     category: '',
+    type: 'cash_out',
     date: new Date().toISOString().split('T')[0],
     notes: ''
   });
@@ -31,6 +32,10 @@ export default function AddExpenseForm({ onAddExpense }) {
     }));
   };
 
+  const handleTypeChange = (type) => {
+      setFormData(prev => ({ ...prev, type }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -52,6 +57,7 @@ export default function AddExpenseForm({ onAddExpense }) {
             title: '',
             amount: '',
             category: '',
+            type: 'cash_out',
             date: new Date().toISOString().split('T')[0],
             notes: ''
         });
@@ -65,7 +71,28 @@ export default function AddExpenseForm({ onAddExpense }) {
 
   return (
     <form onSubmit={handleSubmit} className="expense-form">
-      <h3>Add New Expense</h3>
+      <h3>Add New Transaction</h3>
+      
+      <div className="form-group type-toggle-container">
+          <label>Type</label>
+          <div className="type-toggle">
+              <button 
+                type="button" 
+                className={`type-btn cash-in ${formData.type === 'cash_in' ? 'active' : ''}`}
+                onClick={() => handleTypeChange('cash_in')}
+              >
+                  (+) Cash In
+              </button>
+              <button 
+                type="button" 
+                className={`type-btn cash-out ${formData.type === 'cash_out' ? 'active' : ''}`}
+                onClick={() => handleTypeChange('cash_out')}
+              >
+                  (-) Cash Out
+              </button>
+          </div>
+      </div>
+
       <div className="form-group">
         <label>Title</label>
         <input
@@ -114,7 +141,9 @@ export default function AddExpenseForm({ onAddExpense }) {
           onChange={handleChange}
         />
       </div>
-      <button type="submit">Add Expense</button>
+      <button type="submit" className={formData.type === 'cash_in' ? 'btn-green' : 'btn-red'}>
+          Add {formData.type === 'cash_in' ? 'Income' : 'Expense'}
+      </button>
     </form>
   );
 }
