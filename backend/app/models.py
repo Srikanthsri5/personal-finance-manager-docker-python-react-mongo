@@ -11,6 +11,7 @@ class ExpenseBase(BaseModel):
     amount: float = Field(..., gt=0)
     category: str = Field(..., min_length=1)
     date: datetime = Field(default_factory=datetime.now)
+    type: str = Field(default="cash_out", pattern="^(cash_in|cash_out)$")
     notes: Optional[str] = None
 
 class ExpenseCreate(ExpenseBase):
@@ -21,6 +22,7 @@ class ExpenseUpdate(BaseModel):
     amount: Optional[float] = None
     category: Optional[str] = None
     date: Optional[datetime] = None
+    type: Optional[str] = None
     notes: Optional[str] = None
 
 class ExpenseModel(ExpenseBase):
@@ -34,6 +36,7 @@ class ExpenseModel(ExpenseBase):
                 "title": "Groceries",
                 "amount": 50.25,
                 "category": "Food",
+                "type": "cash_out",
                 "date": "2023-10-01T12:00:00",
                 "notes": "Weekly shopping"
             }
