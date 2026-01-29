@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import expenses
+from .routes import expenses, categories
 
 app = FastAPI(title="Personal Finance Manager")
 
@@ -20,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(expenses.router, prefix="/api")
+app.include_router(categories.router, prefix="/api")
 
 @app.get("/")
 def read_root():

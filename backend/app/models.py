@@ -11,6 +11,7 @@ class ExpenseBase(BaseModel):
     amount: float = Field(..., gt=0)
     category: str = Field(..., min_length=1)
     date: datetime = Field(default_factory=datetime.now)
+    type: str = Field(default="cash_out", pattern="^(cash_in|cash_out)$")
     notes: Optional[str] = None
 
 class ExpenseCreate(ExpenseBase):
@@ -21,6 +22,7 @@ class ExpenseUpdate(BaseModel):
     amount: Optional[float] = None
     category: Optional[str] = None
     date: Optional[datetime] = None
+    type: Optional[str] = None
     notes: Optional[str] = None
 
 class ExpenseModel(ExpenseBase):
@@ -34,8 +36,37 @@ class ExpenseModel(ExpenseBase):
                 "title": "Groceries",
                 "amount": 50.25,
                 "category": "Food",
+                "type": "cash_out",
                 "date": "2023-10-01T12:00:00",
                 "notes": "Weekly shopping"
+            }
+        }
+    )
+
+class CategoryBase(BaseModel):
+    name: str = Field(..., min_length=1)
+    type: str = Field(..., min_length=1)
+    budget: Optional[float] = None
+
+class CategoryCreate(CategoryBase):
+    pass
+
+class CategoryUpdate(BaseModel):
+    name: Optional[str] = None
+    type: Optional[str] = None
+    budget: Optional[float] = None
+
+class CategoryModel(CategoryBase):
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_schema_extra={
+            "example": {
+                "name": "Groceries",
+                "type": "expense",
+                "budget": 500.00
             }
         }
     )

@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
-import './App.css'
-import ExpenseList from './components/ExpenseList'
-import AddExpenseForm from './components/AddExpenseForm'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+import NavBar from './components/NavBar';
+import Dashboard from './pages/Dashboard';
+import Categories from './pages/Categories';
 
 function App() {
   const [expenses, setExpenses] = useState([])
@@ -31,19 +32,17 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <header>
-        <h1>Personal Finance Manager</h1>
-      </header>
-      <main className="main-content">
-        <div className="left-panel">
-            <AddExpenseForm onAddExpense={handleAddExpense} />
-        </div>
-        <div className="right-panel">
-            <ExpenseList expenses={expenses} onDeleteExpense={handleDeleteExpense} />
-        </div>
-      </main>
-    </div>
+    <Router>
+      <div className="app-container">
+        <header>
+           <NavBar />
+        </header>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/categories" element={<Categories />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
