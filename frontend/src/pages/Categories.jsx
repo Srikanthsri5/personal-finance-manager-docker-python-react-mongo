@@ -5,6 +5,7 @@ import { getCategories } from '../services/categoryService';
 
 export default function Categories() {
     const [categories, setCategories] = useState([]);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         fetchCategories();
@@ -21,6 +22,7 @@ export default function Categories() {
 
     const handleAddCategory = (newCategory) => {
         setCategories(prev => [...prev, newCategory]);
+        setSidebarOpen(false); // Close on mobile
     };
 
     const handleDeleteCategory = (id) => {
@@ -29,7 +31,10 @@ export default function Categories() {
 
     return (
         <div className="main-content">
-            <div className="left-panel">
+            <button className="mobile-fab" onClick={() => setSidebarOpen(true)}>+</button>
+
+            <div className={`left-panel ${isSidebarOpen ? 'open' : ''}`}>
+                <button className="close-sidebar-btn" onClick={() => setSidebarOpen(false)}>&times;</button>
                 <AddCategoryForm onCategoryAdded={handleAddCategory} />
             </div>
             <div className="right-panel">
