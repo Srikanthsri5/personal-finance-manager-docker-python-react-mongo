@@ -6,6 +6,7 @@ export default function Dashboard() {
     const [expenses, setExpenses] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [viewMode, setViewMode] = useState('month'); // 'month' or 'all'
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         fetchExpenses();
@@ -34,6 +35,7 @@ export default function Dashboard() {
 
     const handleAddExpense = (newExpense) => {
         setExpenses(prev => [...prev, newExpense]);
+        setSidebarOpen(false); // Close on mobile after add
     };
 
     const handleDeleteExpense = (id) => {
@@ -64,9 +66,13 @@ export default function Dashboard() {
 
     return (
         <div className="main-content">
-            <div className="left-panel">
+            <button className="mobile-fab" onClick={() => setSidebarOpen(true)}>+</button>
+            
+            <div className={`left-panel ${isSidebarOpen ? 'open' : ''}`}>
+                <button className="close-sidebar-btn" onClick={() => setSidebarOpen(false)}>&times;</button>
                 <AddExpenseForm onAddExpense={handleAddExpense} />
             </div>
+            
             <div className="right-panel">
                 <div className="summary-card">
                     <div style={{ textAlign: 'center', marginBottom: '1rem', color: '#ccc', fontSize: '0.9rem' }}>
