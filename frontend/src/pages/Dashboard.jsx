@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ExpenseList from '../components/ExpenseList';
 import AddExpenseForm from '../components/AddExpenseForm';
+import { getBaseUrl } from '../utils/apiConfig';
 
 export default function Dashboard() {
     const [expenses, setExpenses] = useState([]);
@@ -14,7 +15,7 @@ export default function Dashboard() {
 
     const fetchExpenses = async () => {
         try {
-            let url = 'http://localhost:8005/api/expenses/';
+            let url = `${getBaseUrl()}/api/expenses/`;
             if (viewMode === 'month') {
                 const year = currentDate.getFullYear();
                 const month = currentDate.getMonth() + 1; // 1-12
@@ -43,7 +44,7 @@ export default function Dashboard() {
     };
 
     const handleExport = (type) => {
-        let url = `http://localhost:8005/api/expenses/export/${type}`;
+        let url = `${getBaseUrl()}/api/expenses/export/${type}`;
         if (viewMode === 'month') {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth() + 1;

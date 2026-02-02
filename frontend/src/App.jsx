@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import NavBar from './components/NavBar';
@@ -13,7 +14,9 @@ function App() {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('http://localhost:8005/api/expenses/');
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8005';
+      const apiUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
+      const response = await fetch(`${apiUrl}/api/expenses/`);
       if (response.ok) {
         const data = await response.json();
         setExpenses(data);

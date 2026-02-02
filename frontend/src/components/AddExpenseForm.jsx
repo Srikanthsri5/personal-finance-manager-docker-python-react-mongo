@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EXPENSE_CATEGORIES } from '../utils/categories';
+import { getCategories } from '../services/categoryService';
+import { getBaseUrl } from '../utils/apiConfig';
 
 export default function AddExpenseForm({ onAddExpense }) {
   const [formData, setFormData] = useState({
@@ -39,7 +41,7 @@ export default function AddExpenseForm({ onAddExpense }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8005/api/expenses/', {
+      const response = await fetch(`${getBaseUrl()}/api/expenses/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
