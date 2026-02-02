@@ -12,8 +12,9 @@ services:
       - key: PORT
         value: 8005
 
-  - type: static
+  - type: web
     name: pfm-frontend
+    env: static
     region: singapore
     rootDir: ./frontend
     buildCommand: npm install && npm run build
