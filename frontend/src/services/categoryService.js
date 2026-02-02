@@ -1,4 +1,12 @@
-const API_URL = 'http://localhost:8005/api/categories';
+const getBaseUrl = () => {
+    let url = import.meta.env.VITE_API_URL || 'http://localhost:8005';
+    if (!url.startsWith('http')) {
+        url = `https://${url}`;
+    }
+    return url;
+};
+
+const API_URL = `${getBaseUrl()}/api/categories`;
 
 export const getCategories = async () => {
     const response = await fetch(API_URL);
