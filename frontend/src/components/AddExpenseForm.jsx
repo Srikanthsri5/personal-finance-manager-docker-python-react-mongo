@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getCategories } from '../services/categoryService';
+import { useState } from 'react';
+import { EXPENSE_CATEGORIES } from '../utils/categories';
 
 export default function AddExpenseForm({ onAddExpense }) {
   const [formData, setFormData] = useState({
@@ -118,8 +118,8 @@ export default function AddExpenseForm({ onAddExpense }) {
         <label>Category</label>
         <select name="category" value={formData.category} onChange={handleChange} required>
             <option value="">Select Category</option>
-            {categories.map(cat => (
-                <option key={cat._id} value={cat.name}>{cat.name}</option>
+            {EXPENSE_CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
             ))}
         </select>
       </div>
