@@ -15,7 +15,6 @@ services:
   - type: web
     name: pfm-frontend
     env: static
-    region: singapore
     rootDir: ./frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -24,4 +23,4 @@ services:
         fromService:
           type: web
           name: pfm-backend
-          property: url
+          property: host
