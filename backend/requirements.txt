@@ -12,3 +12,4 @@ httpx
 pandas
 openpyxl
 reportlab
+certifi
