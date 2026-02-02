@@ -6,9 +6,10 @@ app = FastAPI(title="Personal Finance Manager")
 
 # CORS middleware configuration
 origins = [
-    "http://localhost:5173",  # Vite default
+    "http://localhost:5173",
     "http://localhost:3000",
     "http://127.0.0.1:5173",
+    "*", # Allow all origins for production (Vercel)
 ]
 
 app.add_middleware(
