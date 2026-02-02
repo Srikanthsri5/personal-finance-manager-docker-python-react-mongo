@@ -24,3 +24,7 @@ services:
           type: web
           name: pfm-backend
           property: host
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: /index.html
