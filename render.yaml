@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: pfm-backend
+    runtime: docker
+    region: singapore # best for India latency
+    plan: free
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: MONGODB_URL
+        sync: false # User will input this in the dashboard
+      - key: PORT
+        value: 8005
