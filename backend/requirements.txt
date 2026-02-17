@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+motor
+pydantic[email]
+python-multipart
+pymongo
+email_validator
+python-jose[cryptography]
+passlib[bcrypt]
