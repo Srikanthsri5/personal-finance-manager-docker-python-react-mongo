@@ -1,3 +1,4 @@
 BACKEND_ARCHITECTURE.md
 .env
 __pycache__
+encrypt.py
